@@ -1,22 +1,24 @@
 var Component = require('./Component');
 var $ = require('jquery');
+var api = require('../api');
 
 class ToDo extends Component {
   constructor(params) {
     super(params);
-    this.text = params.text;
-    this.done = params.done;
+    this.todo = params.todo;
     this.index = params.index;
-    this.onDone = params.onDone;
     this.onRemove = params.onRemove;
-    this.onSave = params.onSave;
   }
 
   getContents() {
     var done = $('<button />');
     done.html('Done');
     done.on('click', () => {
-      this.onDone(this.index);
+      api.markDone(this.index).then(todo => {
+        this.todo.done = todo.done;
+        this.update();
+        console.log(todo.done);
+      });
     });
 
     var remove = $('<button />');
@@ -25,17 +27,22 @@ class ToDo extends Component {
       this.onRemove(this.index);
     });
 
+    var input = $('<input type="text" />');
+    input.attr({
+      disabled: this.todo.done
+    });
+    input.val(this.todo.text);
+
+
     var save = $('<button />');
     save.html('Save');
     save.on('click', () => {
-      this.onSave(this.index);
+      api.changeTodo(this.index, input.val()).then(todo => {
+        this.todo.text = todo.text;
+        this.update();
+      });
     });
 
-    var input = $('<input type="text" />');
-    input.attr({
-      disabled: this.done
-    });
-    input.val(this.text);
 
     return [
       input,
