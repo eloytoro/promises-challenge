@@ -7,30 +7,23 @@ class ToDoList extends Component {
   constructor(params) {
     super(params);
     this.todos = [];
-  }
-
-  refresh() {
     api.getTodos().then(todos => {
       this.todos = todos;
       this.update();
     });
   }
 
-  handleDone() {
-    // ...
-  }
-
-  handleSave() {
-    // ...
-  }
-
-  handleRemove() {
-    // ...
+  handleRemove(index) {
+    api.deleteTodo(index).then(todos => {
+      this.todos = todos;
+      this.update();
+    });
   }
 
   handleAdd() {
-    api.addTodo().then((todo) => {
-      // ...
+    api.addTodo().then(todo => {
+      this.todos.push(todo);
+      this.update();
     });
   }
 
@@ -42,15 +35,8 @@ class ToDoList extends Component {
     return [].concat(
       this.todos.map((todo, index) => {
         return new ToDo({
-          text: todo.text,
-          done: todo.done,
+          todo: todo,
           index: index,
-          onDone: (index) => {
-            this.handleDone(index);
-          },
-          onSave: (index) => {
-            this.handleSave(index);
-          },
           onRemove: (index) => {
             this.handleRemove(index);
           }
