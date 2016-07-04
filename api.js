@@ -14,7 +14,7 @@ var storage = {
 export function getTodos() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(storage.todos);
+      resolve([...storage.todos]);
     }, 100);
   });
 }
@@ -22,7 +22,7 @@ export function getTodos() {
 export function changeTodo(index, text) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      var todo = starge.todos[index];
+      var todo = storage.todos[index];
       if (!todo) {
         reject(new Error('No such ToDo!'));
       }
@@ -45,7 +45,7 @@ export function addTodo() {
 export function markDone(index) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      var todo = starge.todos[index];
+      var todo = storage.todos[index];
       if (!todo) {
         reject(new Error('No such ToDo!'));
       }
@@ -58,12 +58,12 @@ export function markDone(index) {
 export function deleteTodo(index) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      var todo = starge.todos[index];
+      var todo = storage.todos[index];
       if (!todo) {
         reject(new Error('No such ToDo!'));
       }
       storage.todos.splice(index, 1);
-      resolve(storage.todos);
+      resolve([...storage.todos]);
     }, 100);
   });
 }
